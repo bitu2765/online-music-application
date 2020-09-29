@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:my_project/Login.dart';
 import 'package:my_project/authentication/MUser.dart';
@@ -21,7 +21,7 @@ class _BuildpageState extends State<Buildpage> {
     }
     else
     {
-      return Mainpage();
+      return Mainpage(uid: user.uid,);
     }
   }
 }

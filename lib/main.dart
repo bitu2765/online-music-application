@@ -10,6 +10,7 @@ import 'Buildpage.dart';
 
 
 void main()async{
+  String useruid;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
