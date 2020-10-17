@@ -1,16 +1,36 @@
-import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_project/UserData/Finaldata.dart';
+import 'package:music_player/music_player.dart';
+import 'package:my_project/authentication/AuthService.dart';
 
 class Finalplaylist extends StatefulWidget {
-  String collection, image;
-  Finalplaylist({this.collection, this.image});
+  String collection, image, uid;
+  Finalplaylist({this.collection, this.image, this.uid});
   @override
   _fplay createState() => new _fplay();
 }
 
 class _fplay extends State<Finalplaylist> {
+  static MusicPlayer musicplayer;
+  bool isplaying = false, datset = true;
+  DateTime dt = DateTime.now();
+  List<QueryDocumentSnapshot> dr;
+  //final db = FirebaseDatabase.instance.reference();
+
+  @override
+  void initState() {
+    super.initState();
+    initPlateformState();
+  }
+
+  @override
+  Future<void> initPlateformState() async {
+    musicplayer = MusicPlayer();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +82,41 @@ class _fplay extends State<Finalplaylist> {
                                     snapshot.data.docs[i].get('song_name'),
                                     style: TextStyle(fontSize: 20.0),
                                   ),
-                                  onTap: () {})
+                                  subtitle: Text(snapshot.data.docs[i].get("play").toString()+" played",style: TextStyle(color: Colors.amber),),
+                                 // trailing: Icon(Icons.more_vert),
+                                  onTap: () async {
+                                    QuerySnapshot qs = await FirebaseFirestore
+                                        .instance
+                                        .collection(widget.collection)
+                                        .where("song_url",
+                                            isEqualTo: snapshot.data.docs[i]
+                                                .get("song_url"))
+                                        .get();
+                                    await qs.docs.forEach((element) {
+                                      FirebaseFirestore.instance
+                                          .collection(widget.collection)
+                                          .doc(element.id)
+                                          .update({
+                                        "play": FieldValue.increment(1)
+                                      });
+                                    });
+                                    musicplayer.play(MusicItem(
+                                      url:
+                                          snapshot.data.docs[i].get('song_url'),
+                                      trackName: snapshot.data.docs[i]
+                                          .get('song_name'),
+                                      artistName: snapshot.data.docs[i]
+                                          .get('song_name'),
+                                      albumName: snapshot.data.docs[i]
+                                          .get('song_name'),
+                                      coverUrl: snapshot.data.docs[i]
+                                          .get('image_url'),
+                                      duration: Duration(seconds: 255),
+                                    ));
+
+                                    await rhis(
+                                        snapshot.data.docs[i].id.toString());
+                                  })
                           ],
                         ),
                       );
@@ -71,5 +125,90 @@ class _fplay extends State<Finalplaylist> {
             ],
           ),
         ));
+  }
+
+  Future getdoc(String s) async {
+    DocumentSnapshot ds = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(widget.uid)
+        .collection("likes")
+        .doc(s)
+        .get();
+    return ds.exists;
+  }
+
+  bool likes(String lk) {
+    var ds = getdoc(lk);
+
+    if (ds == true)
+      return true;
+    else
+      return false;
+  }
+
+  String dtstr(DateTime d) {
+    String te = d.toString();
+    String ma = te[0];
+    for (int i = 1; i < 10; i++) {
+      ma = ma + te[i];
+    }
+    return ma;
+  }
+
+  void rhis(String k) async {
+    DocumentSnapshot df = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(widget.uid)
+        .collection('history')
+        .doc(dtstr(dt))
+        .get();
+    if (!df.exists) {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.uid)
+          .collection('history')
+          .doc(dtstr(dt))
+          .set({"date": dtstr(dt)});
+    }
+    try {
+      await FirebaseFirestore.instance
+          .collection(widget.collection)
+          .doc(k)
+          .collection('tags')
+          .snapshots()
+          .listen((event) {
+        //print("1111");
+        event.docs.forEach((element) {
+          // print("222");
+          reg(element.get("tag"));
+        });
+      });
+    } catch (e) {
+      print("errors11");
+    }
+  }
+
+  void reg(String sk) async {
+    DocumentSnapshot df = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.uid)
+        .collection(dtstr(dt))
+        .doc(sk)
+        .get();
+    if (df.exists) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uid)
+          .collection(dtstr(dt))
+          .doc(sk)
+          .update({sk: FieldValue.increment(1)});
+    } else {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uid)
+          .collection(dtstr(dt))
+          .doc(sk)
+          .set({sk: FieldValue.increment(1)});
+    }
   }
 }

@@ -9,11 +9,15 @@ import 'package:my_project/screens/Finalplaylist.dart';
 import 'package:my_project/screens/Myplaylist.dart';
 
 class Myplaylist1 extends StatefulWidget {
+  String uid;
+  Myplaylist1({this.uid});
   @override
   _MyPlay1 createState() => new _MyPlay1();
 }
 
 class _MyPlay1 extends State<Myplaylist1> {
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +55,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Finalplaylist(
+                                              uid: widget.uid,
                                                   collection: snapshot
                                                       .data.docs[i]
                                                       .get('album'),
@@ -123,6 +128,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Finalplaylist(
+                                              uid: widget.uid,
                                                   collection: snapshot
                                                       .data.docs[i]
                                                       .get('movie_name'),
@@ -184,7 +190,7 @@ class _MyPlay1 extends State<Myplaylist1> {
             ),
             StreamBuilder(
                 stream:
-                    FirebaseFirestore.instance.collection('artist').snapshots(),
+                    FirebaseFirestore.instance.collection('artist').orderBy("name").snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return CircularProgressIndicator();
@@ -209,6 +215,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   Finalplaylist(
+                                                    uid: widget.uid,
                                                     collection: snapshot
                                                         .data.docs[j]
                                                         .get('name'),
@@ -263,6 +270,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     Finalplaylist(
+                                                      uid: widget.uid,
                                                       collection: snapshot
                                                           .data.docs[j + 1]
                                                           .get('name'),
@@ -318,6 +326,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => Finalplaylist(
+                                            uid: widget.uid,
                                                 collection: snapshot
                                                     .data
                                                     .docs[snapshot

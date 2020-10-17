@@ -1,13 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_project/Login.dart';
-import 'package:my_project/Welcomlogin.dart';
-import 'package:my_project/screens/Getdata.dart';
 import 'package:my_project/screens/Myplaylist1.dart';
-import './screens/Practice.dart';
+import 'package:my_project/screens/Suggestion.dart';
 import 'screens/Myplaylist.dart';
 import 'screens/Downloadfile.dart';
 import 'screens/Uploadfile.dart';
@@ -22,9 +20,10 @@ class Mainpage extends StatefulWidget {
 class _MainpageState extends State<Mainpage> {
   int currentpage = 0;
 
+
   List tabs = [
-    Myplaylist1(),
-    Uploadfile(),
+    Myplaylist1(uid: FirebaseAuth.instance.currentUser.uid),
+    Suggestion(),
     Downloadfile(),
   ];
 
@@ -48,23 +47,19 @@ class _MainpageState extends State<Mainpage> {
                 onTap: null,
               ),
             ),
-            /*
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child:  Icon(Icons.refresh),
-                
-                ),*/
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.0),
-              child: GestureDetector(
-                child: Center(
-                  child: Text("Sign Out",style: TextStyle(fontSize: 18.0),),
-                ),
-                onTap: (){
-                  FirebaseAuth.instance.signOut();
-                },
-              )
-            )
+                padding: EdgeInsets.symmetric(horizontal: 5.0),
+                child: GestureDetector(
+                  child: Center(
+                    child: Text(
+                      "Sign Out",
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                  ),
+                  onTap: () {
+                    FirebaseAuth.instance.signOut();
+                  },
+                ))
           ],
         ),
         body: tabs[currentpage],
@@ -94,4 +89,5 @@ class _MainpageState extends State<Mainpage> {
       ),
     );
   }
+
 }

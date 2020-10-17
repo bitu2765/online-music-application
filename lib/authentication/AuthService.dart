@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+
+import 'package:flutter/scheduler.dart';
 import 'package:my_project/authentication/userdatabse.dart';
-import 'package:my_project/screens/Practice.dart';
 
 import 'MUser.dart';
 
@@ -19,14 +19,24 @@ class AuthService {
     return _auth.authStateChanges().map( _userFromFirebaseUser);
   }
   //create account with email&password in firebase
-  Future registerwithemailandpassword(String email,String pass)async{
+  void registerwithemailandpassword(String email,String pass)async{
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: pass);
-
-    User user = result.user;
-    //add user on firebase firestore for user record
-    await UserDatabase(uid:  user.uid).updateusetdata(email, pass);
-    return  _userFromFirebaseUser(user);
+      User user = result.user;
+        try{
+           await user.sendEmailVerification();
+           //add user on firebase firestore for user record
+           await UserDatabase(uid:  user.uid).updateusetdata(email, pass);
+           signOut();
+        }
+        catch(e)
+        {
+          user.delete();
+          print("verification not complete");
+          return;
+        }
+      
+   // return  _userFromFirebaseUser(user);
     }catch(e)
     {
       print(e.toString());
@@ -41,8 +51,11 @@ class AuthService {
     try{
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: pass);
       User user  = result.user;
-
-
+      if(!user.emailVerified)
+      {
+        signOut();
+        return;
+      }
       return _userFromFirebaseUser(user);
     }
     catch(e)
