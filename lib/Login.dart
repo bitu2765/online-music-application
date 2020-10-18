@@ -99,6 +99,7 @@ class _LoginState extends State<Login> {
                                   BoxShadow(color: Colors.grey[400])
                                 ]),
                             child: TextFormField(
+                              obscureText: true,
                               decoration: InputDecoration(
                                 hintText: 'Enter Password',
                                 hintStyle: TextStyle(

@@ -15,7 +15,6 @@ class Mainpage extends StatefulWidget {
 class _MainpageState extends State<Mainpage> {
   int currentpage = 0;
 
-
   List tabs = [
     Myplaylist1(uid: FirebaseAuth.instance.currentUser.uid),
     Suggestion(),
@@ -39,10 +38,13 @@ class _MainpageState extends State<Mainpage> {
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: GestureDetector(
                   child: Center(
-                    child: Image.asset("assets/images/logout.png",width: 25.0,height: 25.0,)
-                  ),
+                      child: Image.asset(
+                    "assets/images/logout.png",
+                    width: 25.0,
+                    height: 25.0,
+                  )),
                   onTap: () {
-                    FirebaseAuth.instance.signOut();
+                    showalert();
                   },
                 ))
           ],
@@ -53,16 +55,31 @@ class _MainpageState extends State<Mainpage> {
           selectedItemColor: Colors.blueAccent[400],
           items: [
             BottomNavigationBarItem(
-              icon: Image.asset("assets/images/home.png",width: 25.0,color: Colors.white,),
+              icon: Image.asset(
+                "assets/images/home.png",
+                width: 25.0,
+                color: Colors.white,
+              ),
               title: Text("home"),
             ),
             BottomNavigationBarItem(
-              icon: Image.asset("assets/images/more.png",width: 25.0,color: Colors.white,),
+              icon: Image.asset(
+                "assets/images/more.png",
+                width: 25.0,
+                color: Colors.white,
+              ),
               title: Text("suggestion"),
             ),
             BottomNavigationBarItem(
-              icon: Image.asset("assets/images/add-user.png",width: 25.0,color: Colors.white,),
-              title: Text("you",style: TextStyle(fontSize: 15.0),),
+              icon: Image.asset(
+                "assets/images/add-user.png",
+                width: 25.0,
+                color: Colors.white,
+              ),
+              title: Text(
+                "you",
+                style: TextStyle(fontSize: 15.0),
+              ),
             )
           ],
           onTap: (index) {
@@ -75,4 +92,28 @@ class _MainpageState extends State<Mainpage> {
     );
   }
 
+  Future<void> showalert() async {
+    return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Logout"),
+            content: Text("Are you sure want to logout"),
+            actions: [
+              FlatButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Cancel")),
+              FlatButton(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                    Navigator.pop(context);
+                  },
+                  child: Text("OK"))
+            ],
+          );
+        });
+  }
 }

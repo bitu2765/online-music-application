@@ -1,3 +1,6 @@
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:music_player/music_player.dart';
@@ -188,25 +191,6 @@ class _fplay extends State<Finalplaylist> {
             ),
           ));
     }
-  }
-
-  Future getdoc(String s) async {
-    DocumentSnapshot ds = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(widget.uid)
-        .collection("likes")
-        .doc(s)
-        .get();
-    return ds.exists;
-  }
-
-  bool likes(String lk) {
-    var ds = getdoc(lk);
-
-    if (ds == true)
-      return true;
-    else
-      return false;
   }
 
   String dtstr(DateTime d) {
