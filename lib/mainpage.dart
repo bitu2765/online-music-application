@@ -99,7 +99,7 @@ class _MainpageState extends State<Mainpage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Logout"),
-            content: Text("Are you sure want to logout"),
+            content: Text("Sure you want to logout?"),
             actions: [
               FlatButton(
                   onPressed: () {
