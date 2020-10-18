@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:music_player/music_player.dart';
 import 'package:my_project/SongObj/SObject.dart';
 
-
 class Finalplaylist extends StatefulWidget {
   String collection, image, uid;
   SObject sk;
@@ -38,52 +37,54 @@ class _fplay extends State<Finalplaylist> {
         appBar: AppBar(
           title: Text(widget.sk.album),
         ),
-        body: Column(
-          children: [
-            SizedBox(
-              height: 20.0,
-            ),
-            Container(
-              margin: EdgeInsets.all(25.0),
-              height: 300.0,
-              width: 300.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                image: DecorationImage(
-                    image: NetworkImage(widget.sk.img_url), fit: BoxFit.fill),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20.0,
               ),
-            ),
-            SizedBox(
-              height: 10.0,
-            ),
-            Text(
-              widget.sk.song,
-              style: TextStyle(fontSize: 35.0),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              height: 15.0,
-            ),
-            Center(
-              child: GestureDetector(
-                onTap: () async {
-                  musicplayer.play(MusicItem(
-                    url: widget.sk.song_url,
-                    albumName: widget.sk.album,
-                    artistName: widget.sk.album,
-                    coverUrl: widget.sk.img_url,
-                    trackName: widget.sk.song,
-                    duration: Duration(seconds: 255),
-                  ));
-                },
-                child: Icon(
-                  Icons.play_circle_filled,
-                  color: Colors.blue,
-                  size: 55.0,
+              Container(
+                margin: EdgeInsets.all(25.0),
+                height: 300.0,
+                width: 300.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                  image: DecorationImage(
+                      image: NetworkImage(widget.sk.img_url), fit: BoxFit.fill),
                 ),
               ),
-            )
-          ],
+              SizedBox(
+                height: 10.0,
+              ),
+              Text(
+                widget.sk.song,
+                style: TextStyle(fontSize: 35.0),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 15.0,
+              ),
+              Center(
+                child: GestureDetector(
+                  onTap: () async {
+                    musicplayer.play(MusicItem(
+                      url: widget.sk.song_url,
+                      albumName: widget.sk.album,
+                      artistName: widget.sk.album,
+                      coverUrl: widget.sk.img_url,
+                      trackName: widget.sk.song,
+                      duration: Duration(seconds: 255),
+                    ));
+                  },
+                  child: Icon(
+                    Icons.play_circle_filled,
+                    color: Colors.blue,
+                    size: 55.0,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       );
     } else {

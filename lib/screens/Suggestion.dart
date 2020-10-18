@@ -62,7 +62,8 @@ class _SuggestionState extends State<Suggestion> {
     await FirebaseFirestore.instance.collection(s).snapshots().listen((event1) {
       event1.docs.forEach((element1) {
         int cntt = 0;
-        FirebaseFirestore.instance
+        try{
+          FirebaseFirestore.instance
             .collection(s)
             .doc(element1.id)
             .collection("tags")
@@ -77,6 +78,7 @@ class _SuggestionState extends State<Suggestion> {
           });
           if (cntt > 0) {
             SObject tek = SObject(
+                view: element1.get("play"),
                 album: s,
                 song: element1.get("song_name"),
                 song_url: element1.get("song_url"),
@@ -85,12 +87,12 @@ class _SuggestionState extends State<Suggestion> {
             k.add(tek);
           }
         });
-      });
-      //sorting();
-    });
+        }catch(e)
+        {
 
-    print("object");
-    await print(k.length);
+        }
+      });
+    });
   }
 
   int sorting() {
@@ -113,20 +115,21 @@ class _SuggestionState extends State<Suggestion> {
           itemBuilder: (context, ind) {
             try {
               return ListTile(
+                contentPadding: EdgeInsets.all(10.0),
                   leading: CircleAvatar(
                     radius: 30.0,
                     backgroundImage: NetworkImage(k[ind].img_url),
                   ),
                   title: Text(k[ind].song),
-                  subtitle: Text(k[ind].cnt.toString()),
+                  trailing: Text(k[ind].view.toString()+"  played",style: TextStyle(color: Colors.amber),),
                   onTap: () async {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Finalplaylist(
-                              ke: true,
-                              sk: k[ind],
-                            )));
+                                  ke: true,
+                                  sk: k[ind],
+                                )));
                   });
             } catch (e) {
               return Center(
