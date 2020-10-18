@@ -1,14 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_project/screens/Account.dart';
 import 'package:my_project/screens/Myplaylist1.dart';
 import 'package:my_project/screens/Suggestion.dart';
-import 'screens/Myplaylist.dart';
-import 'screens/Downloadfile.dart';
-import 'screens/Uploadfile.dart';
 
 class Mainpage extends StatefulWidget {
   String uid;
@@ -24,7 +19,7 @@ class _MainpageState extends State<Mainpage> {
   List tabs = [
     Myplaylist1(uid: FirebaseAuth.instance.currentUser.uid),
     Suggestion(),
-    Downloadfile(),
+    Account(),
   ];
 
   @override
@@ -37,24 +32,14 @@ class _MainpageState extends State<Mainpage> {
       home: Scaffold(
         backgroundColor: Colors.grey[800],
         appBar: AppBar(
-          title: new Text("My Music"),
+          title: new Text("Music"),
           //backgroundColor: Colors.black26,
           actions: [
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: GestureDetector(
-                child: Icon(Icons.search),
-                onTap: null,
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 5.0),
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: GestureDetector(
                   child: Center(
-                    child: Text(
-                      "Sign Out",
-                      style: TextStyle(fontSize: 18.0),
-                    ),
+                    child: Image.asset("assets/images/logout.png",width: 25.0,height: 25.0,)
                   ),
                   onTap: () {
                     FirebaseAuth.instance.signOut();
@@ -65,19 +50,19 @@ class _MainpageState extends State<Mainpage> {
         body: tabs[currentpage],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: currentpage,
-          selectedItemColor: Colors.white30,
+          selectedItemColor: Colors.blueAccent[400],
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Image.asset("assets/images/home.png",width: 25.0,color: Colors.white,),
               title: Text("home"),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              title: Text("upload"),
+              icon: Image.asset("assets/images/more.png",width: 25.0,color: Colors.white,),
+              title: Text("suggestion"),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.cloud_download),
-              title: Text("download"),
+              icon: Image.asset("assets/images/add-user.png",width: 25.0,color: Colors.white,),
+              title: Text("you",style: TextStyle(fontSize: 15.0),),
             )
           ],
           onTap: (index) {

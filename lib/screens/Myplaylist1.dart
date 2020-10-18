@@ -1,12 +1,9 @@
-import 'dart:async';
 import 'dart:ui';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:async/async.dart';
 import 'package:my_project/screens/Finalplaylist.dart';
-import 'package:my_project/screens/Myplaylist.dart';
+
 
 class Myplaylist1 extends StatefulWidget {
   String uid;
@@ -55,6 +52,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Finalplaylist(
+                                              ke: false,
                                               uid: widget.uid,
                                                   collection: snapshot
                                                       .data.docs[i]
@@ -128,6 +126,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => Finalplaylist(
+                                              ke: false,
                                               uid: widget.uid,
                                                   collection: snapshot
                                                       .data.docs[i]
@@ -215,6 +214,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   Finalplaylist(
+                                                    ke: false,
                                                     uid: widget.uid,
                                                     collection: snapshot
                                                         .data.docs[j]
@@ -270,6 +270,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     Finalplaylist(
+                                                      ke: false,
                                                       uid: widget.uid,
                                                       collection: snapshot
                                                           .data.docs[j + 1]
@@ -326,6 +327,7 @@ class _MyPlay1 extends State<Myplaylist1> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => Finalplaylist(
+                                            ke: false,
                                             uid: widget.uid,
                                                 collection: snapshot
                                                     .data

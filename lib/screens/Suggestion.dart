@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_project/SongObj/SObject.dart';
+import 'package:my_project/screens/Finalplaylist.dart';
 
 class Suggestion extends StatefulWidget {
   @override
@@ -75,34 +75,26 @@ class _SuggestionState extends State<Suggestion> {
               }
             } catch (e) {}
           });
-          if(cntt>0)
-          {
+          if (cntt > 0) {
             SObject tek = SObject(
-              song: element1.get("song_name"),
-              song_url: element1.get("song_url"),
-              img_url: element1.get("image_url"),
-              cnt: cntt
-              );
-          k.add(tek);
+                album: s,
+                song: element1.get("song_name"),
+                song_url: element1.get("song_url"),
+                img_url: element1.get("image_url"),
+                cnt: cntt);
+            k.add(tek);
           }
         });
       });
       //sorting();
     });
 
-   // await sorting();
-
-    //  await k.forEach((element) {
-    //     print(element.song);
-    //     print(element.cnt);
-    //   });
     print("object");
     await print(k.length);
   }
 
   int sorting() {
-
-    ()async{
+    () async {
       filter();
     };
 
@@ -121,13 +113,21 @@ class _SuggestionState extends State<Suggestion> {
           itemBuilder: (context, ind) {
             try {
               return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(k[ind].img_url),
-                ),
-                title: Text(k[ind].song),
-                subtitle: Text(k[ind].cnt.toString()),
-                onTap: null,
-              );
+                  leading: CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage: NetworkImage(k[ind].img_url),
+                  ),
+                  title: Text(k[ind].song),
+                  subtitle: Text(k[ind].cnt.toString()),
+                  onTap: () async {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Finalplaylist(
+                              ke: true,
+                              sk: k[ind],
+                            )));
+                  });
             } catch (e) {
               return Center(
                 child: CircularProgressIndicator(),
@@ -135,12 +135,15 @@ class _SuggestionState extends State<Suggestion> {
             }
           }),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        onPressed: () async{
+        backgroundColor: Colors.blue[300],
+        onPressed: () async {
           await k.clear();
           await filter();
         },
-        child: Icon(Icons.refresh,size: 30.0,),
+        child: Icon(
+          Icons.refresh,
+          size: 30.0,
+        ),
       ),
     );
   }
@@ -162,5 +165,3 @@ class _SuggestionState extends State<Suggestion> {
     }
   }
 }
-
-class document {}

@@ -1,11 +1,5 @@
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:async/async.dart';
-import 'package:path/path.dart';
-
 class Uploadfile extends StatefulWidget {
   @override
   _Uploaded createState() => _Uploaded();
