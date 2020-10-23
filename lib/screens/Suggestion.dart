@@ -83,6 +83,7 @@ class _SuggestionState extends State<Suggestion> {
                 song: element1.get("song_name"),
                 song_url: element1.get("song_url"),
                 img_url: element1.get("image_url"),
+                did: element1.id,
                 cnt: cntt);
             k.add(tek);
           }

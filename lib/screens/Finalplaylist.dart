@@ -70,7 +70,8 @@ class _fplay extends State<Finalplaylist> {
               Center(
                 child: GestureDetector(
                   onTap: () async {
-                    musicplayer.play(MusicItem(
+                    await FirebaseFirestore.instance.collection(widget.sk.album).doc(widget.sk.did).update({"play":FieldValue.increment(1)});
+                  await  musicplayer.play(MusicItem(
                       url: widget.sk.song_url,
                       albumName: widget.sk.album,
                       artistName: widget.sk.album,
